@@ -18,7 +18,6 @@ paper_content = {key: paper[key] for key in keys}
 generate_base_models(args.url)
 generate_paper_models(paper_content)
 print(ollama.list().models)
-exit()
 
 def consultWiki(question):
     print(f"Searching Wikipedia for: {question}")
@@ -77,8 +76,8 @@ def consultReviewer3(abstract):
     print(review)
     return review.split(' ')[0]
 
-def consultQuestioner(abstract):
-    return consultAgent('questioner', abstract)
+def consultQuestioner(text):
+    return consultAgent('questioner', text)
 
 available_models = [model.model for model in ollama.list().models]
 
