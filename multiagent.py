@@ -5,7 +5,7 @@ import requests
 import re
 import argparse
 from pdf_extract import pdf_pipeline
-from build_models import generate_models, isModelLoaded
+from build_models import generate_base_models, generate_paper_models, isModelLoaded
 
 parser = argparse.ArgumentParser(description="MultiAgent paper review")
 parser.add_argument("url", type=str, help="Path to the Conference CFP")
@@ -13,7 +13,12 @@ parser.add_argument("pdf_path", type=str, help="Path to the PDF file")
 args = parser.parse_args()
 
 paper = pdf_pipeline(args.pdf_path)
-generate_models(args.url)
+keys = list(paper.keys())[1:-1]  # Skip the first and last keys
+paper_content = {key: paper[key] for key in keys}
+generate_base_models(args.url)
+generate_paper_models(paper_content)
+print(ollama.list().models)
+exit()
 
 def consultWiki(question):
     print(f"Searching Wikipedia for: {question}")
@@ -72,6 +77,9 @@ def consultReviewer3(abstract):
     print(review)
     return review.split(' ')[0]
 
+def consultQuestioner(abstract):
+    return consultAgent('questioner', abstract)
+
 available_models = [model.model for model in ollama.list().models]
 
 available_functions = {
@@ -79,10 +87,12 @@ available_functions = {
     'consultDeskReviewer': consultDeskReviewer,
     'consultReviewer1': consultReviewer1,
     'consultReviewer2': consultReviewer2,
-    'consultReviewer3': consultReviewer3
+    'consultReviewer3': consultReviewer3,
+    'consultQuestioner': consultQuestioner,
 }
 
 print(consultDeskReviewer(paper['Abstract']))
 print(consultReviewer1(paper['Abstract']))
 print(consultReviewer2(paper['Abstract']))
 print(consultReviewer3(paper['Abstract']))
+print(consultQuestioner(paper['Abstract']))

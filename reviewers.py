@@ -37,10 +37,9 @@ conflict_of_interest = [
 # Review decisions based on the quality of the paper
 decisions = [
     "Accept",                    # The paper is of high quality and valuable
-    "Minor Revisions",           # The paper needs small improvements or clarifications
-    "Major Revisions",           # The paper requires significant changes
+    "WeakAccept",           # The paper needs small improvements or clarifications
+    "WeakReject",           # The paper requires significant changes
     "Reject",                    # The paper is not suitable for publication
-    "Reject with Encouragement"  # The paper has flaws but can be revised and resubmitted
 ]
 
 class Reviewer:
