@@ -79,6 +79,9 @@ def consultReviewer3(abstract):
 def consultQuestioner(text):
     return consultAgent('questioner', text)
 
+def consultGrammar(text):
+    return consultAgent('grammar', text)
+
 available_models = [model.model for model in ollama.list().models]
 
 available_functions = {
@@ -88,10 +91,12 @@ available_functions = {
     'consultReviewer2': consultReviewer2,
     'consultReviewer3': consultReviewer3,
     'consultQuestioner': consultQuestioner,
+    'consultGrammar': consultGrammar,
 }
 
 print(consultDeskReviewer(paper['Abstract']))
-print(consultReviewer1(paper['Abstract']))
-print(consultReviewer2(paper['Abstract']))
-print(consultReviewer3(paper['Abstract']))
+# print(consultReviewer1(paper['Abstract']))
+# print(consultReviewer2(paper['Abstract']))
+# print(consultReviewer3(paper['Abstract']))
 print(consultQuestioner(paper['Abstract']))
+print(consultGrammar(paper['Abstract']))

@@ -22,7 +22,8 @@ def generate_base_models(url):
         "reviewer2": reviewer_messages[1],
         "reviewer3": reviewer_messages[2],
         "deskreviewer": gen_desk_review_message(url),
-        "questioner": "Your job is to ask questions about this section. Your questions should be open-ended and should not be leading. Your questions should be about the paper and not about the authors. Your questions should be about the content of the paper and not about the presentation of the paper. Your questions should be about the paper and not about the conference. Your questions should be about the paper and not about the reviewers."
+        "questioner": "Your job is to ask questions about this section. Your questions should be open-ended and should not be leading. Your questions should be about the paper and not about the authors. Your questions should be about the content of the paper and not about the presentation of the paper. Your questions should be about the paper and not about the conference. Your questions should be about the paper and not about the reviewers.",
+        "grammar": "Your job is to check the grammar of the paper. Your decisions have to be [Accept/Reject], where \"Accept\" means the grammar is correct and \"Reject\" means the grammar is incorrect. ONLY say \"Accept\" if the grammar is correct. ONLY say \"Reject\" if the grammar is incorrect."
     }
 
     for model, system in models.items():
