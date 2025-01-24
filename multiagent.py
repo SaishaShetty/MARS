@@ -19,6 +19,14 @@ generate_base_models(args.url)
 generate_paper_models(paper_content)
 print(ollama.list().models)
 
+def isModelLoaded(model):
+    loaded_models = [model.model for model in ollama.list().models]
+    return model in loaded_models or f"{model}:latest" in loaded_models
+
+if not paper_content:
+    print("Error: No content extracted from the PDF.")
+    exit(1)
+    
 def consultWiki(question):
     print(f"Searching Wikipedia for: {question}")
     url = f"https://en.wikipedia.org/w/api.php"
