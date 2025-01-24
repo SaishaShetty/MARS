@@ -5,25 +5,8 @@ import requests
 import re
 import argparse
 import json
-from PyPDF2 import PdfReader
 from build_models import generate_base_models, generate_paper_models, isModelLoaded
-
-
-# PDF extraction function
-def pdf_pipeline(pdf_path):
-    try:
-        reader = PdfReader(pdf_path)
-        content = {}
-        for page in reader.pages:
-            text = page.extract_text()
-            if text:
-                if "Abstract" in text:
-                    content["Abstract"] = text.split("Abstract")[1].split("\n")[0]
-        return content
-    except Exception as e:
-        print(f"Error extracting text from PDF: {e}")
-        return {}
-
+from pdf_test import pdf_pipeline  
 
 def consultAgent(agent, question):
     if not isModelLoaded(agent):
@@ -39,31 +22,32 @@ def consultAgent(agent, question):
         return f"Error: {e}"
 
 
-def collect_feedback(content):
+def collect_feedback(content, section_name):
+    """Collect feedback for a given section."""
     feedback = {}
     feedback["DeskReviewer"] = consultAgent(
         "deskreviewer",
-        f"Evaluate this abstract for relevance to the conference topics. Respond with [Accept] or [Reject] and provide reasoning: {content}",
+        f"Evaluate this {section_name} for relevance to the conference topics. Respond with [Accept] or [Reject] and provide reasoning: {content}",
     )
     feedback["Reviewer1"] = consultAgent(
         "reviewer1",
-        f"Review this abstract's quality. Provide an [Accept], [Weak Accept], [Weak Reject], or [Reject] decision and reasoning: {content}",
+        f"Review the quality of this {section_name}. Provide an [Accept], [Weak Accept], [Weak Reject], or [Reject] decision and reasoning: {content}",
     )
     feedback["Reviewer2"] = consultAgent(
         "reviewer2",
-        f"Provide feedback on the strengths and weaknesses of this abstract. Include an [Accept], [Weak Accept], [Weak Reject], or [Reject] decision: {content}",
+        f"Provide feedback on the strengths and weaknesses of this {section_name}. Include an [Accept], [Weak Accept], [Weak Reject], or [Reject] decision: {content}",
     )
     feedback["Reviewer3"] = consultAgent(
         "reviewer3",
-        f"Provide constructive feedback on this abstract. Respond with [Accept], [Weak Accept], [Weak Reject], or [Reject], followed by reasoning and suggestions: {content}",
+        f"Provide constructive feedback on this {section_name}. Respond with [Accept], [Weak Accept], [Weak Reject], or [Reject], followed by reasoning and suggestions: {content}",
     )
     feedback["Questioner"] = consultAgent(
-          "questioner",
-          f"Ask open-ended, non-leading questions about the following content. Focus on the paper's content, not its authors, presentation, reviewers, or the conference: {content}",
-      )
+        "questioner",
+        f"Ask open-ended, non-leading questions about the following {section_name}. Focus on the paper's content, not its authors, presentation, reviewers, or the conference: {content}",
+    )
     feedback["Grammar"] = consultAgent(
         "grammar",
-        f"Check the abstract for grammar issues. Respond with [Accept] if the grammar is correct or [Reject] if there are errors, and provide corrections: {content}",
+        f"Check the {section_name} for grammar issues. Respond with [Accept] if the grammar is correct or [Reject] if there are errors, and provide corrections: {content}",
     )
     return feedback
 
@@ -75,26 +59,29 @@ if __name__ == "__main__":
     parser.add_argument("pdf_path", type=str, help="Path to the PDF file")
     args = parser.parse_args()
 
-    paper = pdf_pipeline(args.pdf_path)
-    if not paper:
+    # Extract sections from the PDF
+    paper_sections = pdf_pipeline(args.pdf_path)
+    if not paper_sections:
         print("Error: No content extracted from the PDF.")
         exit(1)
-
-    abstract_content = paper.get("Abstract", "No Abstract Found")
-    if abstract_content == "No Abstract Found":
-        print("Error: Abstract not found in the paper.")
-        exit(1)
-
     generate_base_models(args.url)
-    generate_paper_models({"Abstract": abstract_content})
+    generate_paper_models(paper_sections)
     print("Available models:", [model.model for model in ollama.list().models])
 
-    feedback = collect_feedback(abstract_content)
-    print("\nCollected Feedback:")
-    for reviewer, comments in feedback.items():
-        print(f"- {reviewer}: {comments}")
 
-    # Save feedback to JSON file
+    all_feedback = {}
+    for section_name, content in paper_sections.items():
+        print(f"\nCollecting feedback for section: {section_name}")
+        feedback = collect_feedback(content, section_name)
+        all_feedback[section_name] = feedback
+
+
+    print("\nCollected Feedback:")
+    for section, feedback in all_feedback.items():
+        print(f"\nFeedback for {section}:")
+        for reviewer, comments in feedback.items():
+            print(f"- {reviewer}: {comments}")
+
     with open("feedback.json", "w") as f:
-        json.dump(feedback, f, indent=4)
+        json.dump(all_feedback, f, indent=4)
     print("\nFeedback saved to feedback.json")
