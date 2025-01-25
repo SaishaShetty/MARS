@@ -1,12 +1,12 @@
-from reviewers import reviewer_messages
+from util.reviewers import reviewer_messages
 import re
 import os
 import ollama
 from ollama import chat
 from ollama import ChatResponse
-from extract_cfp import CFPTopicExtractor
-from scholar import search_arxiv_papers
-from extract_keywords import extract_keywords
+from util.extract_cfp import CFPTopicExtractor
+from util.scholar import search_arxiv_papers
+from util.extract_keywords import extract_keywords
 
 def isModelLoaded(model):
     loaded_models = [model.model for model in ollama.list().models]

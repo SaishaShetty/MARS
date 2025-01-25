@@ -4,7 +4,7 @@ from ollama import ChatResponse
 import requests
 import re
 import argparse
-from pdf_extract import pdf_pipeline
+from util.pdf_extract import pdf_pipeline
 from build_models import generate_base_models, generate_paper_models, isModelLoaded
 
 parser = argparse.ArgumentParser(description="MultiAgent paper review")

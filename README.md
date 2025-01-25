@@ -77,3 +77,15 @@ python test.py https://www.example.com/cfp example_paper.pdf
 
 4. **Feedback Storage**:
    - Saves the feedback in a structured JSON format.
+
+## Project Structure
+- **`test.py`**: Entry point for testing the paper review system.
+- **`pdf_test.py`**: Handles PDF parsing and section extraction.
+- **`build_models.py`**: Manages AI model creation and interaction.
+- **`requirements.txt`**: Lists all dependencies for the project.
+- **`util/`**: Contains utility scripts for various tasks.
+  - **`extract_cfp.py`**: Extracts topics from CFP.
+  - **`extract_keywords.py`**: Extracts keywords from text.
+  - **`pdf_extract.py`**: Extracts text from PDF files.
+  - **`reviewers.py`**: Defines reviewer classes and functions.
+  - **`scholar.py`**: Searches for academic papers.
