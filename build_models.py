@@ -14,33 +14,30 @@ def gen_desk_review_message(url):
     extractor = CFPTopicExtractor()
     results = extractor.extract_topics(url)
     print(results)
-    return f"Your job is to judge whether a paper is relevant to a conference on these topics and these topics ONLY: {', '.join(results['topics'])}. Your decisions have to be [Accept/Reject]."
+    return f"You are a desk reviewer for a conference. Your job is to evaluate the section for relevance to the conference topics mentioned in  {', '.join(results['topics'])}. Respond with [Accept] or [Reject], and provide reasoning for your decision."
 
 def generate_base_models(url):
     models = {
+        "deskreviewer": gen_desk_review_message(url),
         "reviewer1": reviewer_messages[0],
         "reviewer2": reviewer_messages[1],
         "reviewer3": reviewer_messages[2],
-        "deskreviewer": gen_desk_review_message(url),
         "questioner": "Your job is to ask questions about this section. Your questions should be open-ended and should not be leading. Your questions should be about the paper and not about the authors. Your questions should be about the content of the paper and not about the presentation of the paper. Your questions should be about the paper and not about the conference. Your questions should be about the paper and not about the reviewers.",
-        "grammar": "Your job is to check the grammar of the paper. Your decisions have to be [Accept/Reject], where \"Accept\" means the grammar is correct and \"Reject\" means the grammar is incorrect. ONLY say \"Accept\" if the grammar is correct. ONLY say \"Reject\" if the grammar is incorrect.",
-        "test": "This is a test model. Please ignore this message."
+        "grammar": "You are a grammar checker. Review the section for grammar issues. Respond with [Accept] if the grammar is correct or [Reject] if there are issues, followed by specific corrections.",
     }
 
     for model, system in models.items():
         if not isModelLoaded(model):
             print(f"Creating model {model}")
-            ollama.create(model=model, from_='llama3.2', system=system, parameters={'num_ctx': 4096, 'temperature': 0.7})
+            ollama.create(model=model, from_="llama3.2", system=system, parameters={"num_ctx": 4096, "temperature": 0.7})
         else:
-            print(f"Deleting model {model}")
+            print(f"Recreating model {model}")
             ollama.delete(model=model)
-            print(f"Creating model {model}")
-            ollama.create(model=model, from_='llama3.2', system=system, parameters={'num_ctx': 4096, 'temperature': 0.7})
+            ollama.create(model=model, from_="llama3.2", system=system, parameters={"num_ctx": 4096, "temperature": 0.7})
 
-    
     return None
 
-def generate_paper_models(paper_contents):
+"""def generate_paper_models(paper_contents):
 
     for i, (key, value) in enumerate(paper_contents.items()):
         key = key.replace("\n", "")
@@ -56,4 +53,16 @@ def generate_paper_models(paper_contents):
             print(f"Creating model {key}")
             ollama.create(model=key, from_='llama3.2', system=value, parameters={'num_ctx': 4096, 'temperature': 0.7})
     
+    return None"""
+
+def generate_paper_models(paper_contents):
+    for key, value in paper_contents.items():
+        key = key.replace("\n", "").replace(" ", "")[:10]
+        if not isModelLoaded(key):
+            print(f"Creating model {key}")
+            ollama.create(model=key, from_="llama3.2", system=value, parameters={"num_ctx": 4096, "temperature": 0.7})
+        else:
+            print(f"Recreating model {key}")
+            ollama.delete(model=key)
+            ollama.create(model=key, from_="llama3.2", system=value, parameters={"num_ctx": 4096, "temperature": 0.7})
     return None
