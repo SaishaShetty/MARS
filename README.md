@@ -1,4 +1,4 @@
-# MultiAgent Paper Review
+# LitAI - MultiAgent Paper Review
 
 ### Overview
 The MultiAgent Paper Review project is designed to automate the evaluation of research papers by leveraging multiple AI agents. These agents provide feedback on different sections of a research paper, including relevance, quality, grammar, and open-ended questions. The project utilizes the Ollama framework for model interactions and PyPDF2 for PDF processing.
