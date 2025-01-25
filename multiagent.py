@@ -15,7 +15,7 @@ args = parser.parse_args()
 paper = pdf_pipeline(args.pdf_path)
 keys = list(paper.keys())[1:-1]  # Skip the first and last keys
 paper_content = {key: paper[key] for key in keys}
-generate_base_models(args.url)
+generate_base_models(args.url, paper['Abstract'])
 generate_paper_models(paper_content)
 print(ollama.list().models)
 
@@ -93,6 +93,9 @@ def consultGrammar(text):
 def consultTest(text):
     return consultAgent('test', text)
 
+def consultNovelty(text):
+    return consultAgent('novelty', text)
+
 available_models = [model.model for model in ollama.list().models]
 
 available_functions = {
@@ -104,11 +107,10 @@ available_functions = {
     'consultQuestioner': consultQuestioner,
     'consultGrammar': consultGrammar,
     'consultTest': consultTest,
+    'consultNovelty': consultNovelty,
 }
 
 print(consultDeskReviewer(paper['Abstract']))
-# print(consultReviewer1(paper['Abstract']))
-# print(consultReviewer2(paper['Abstract']))
-# print(consultReviewer3(paper['Abstract']))
-print(consultQuestioner(paper['Abstract']))
-print(consultGrammar(paper['Abstract']))
+print("QUESTION", consultQuestioner(paper['Abstract']))
+print("GRAMMAR", consultGrammar(paper['Abstract']))
+print(consultNovelty(paper['Abstract']))

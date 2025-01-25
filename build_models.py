@@ -5,6 +5,8 @@ import ollama
 from ollama import chat
 from ollama import ChatResponse
 from extract_cfp import CFPTopicExtractor
+from scholar import search_arxiv_papers
+from extract_keywords import extract_keywords
 
 def isModelLoaded(model):
     loaded_models = [model.model for model in ollama.list().models]
@@ -13,17 +15,28 @@ def isModelLoaded(model):
 def gen_desk_review_message(url):
     extractor = CFPTopicExtractor()
     results = extractor.extract_topics(url)
-    print(results)
-    return f"You are a desk reviewer for a conference. Your job is to evaluate the section for relevance to the conference topics mentioned in  {', '.join(results['topics'])}. Respond with [Accept] or [Reject], and provide reasoning for your decision."
+    return f"Your job is to judge whether a paper is relevant to a conference on these topics and these topics ONLY: {', '.join(results['topics'])}. Your decisions have to be [Accept/Reject]."
 
-def generate_base_models(url):
+def gen_novelty_model(paper_contents):
+    keywords = extract_keywords(paper_contents, num_keywords=10)
+    keywords = ' '.join(keywords)
+    relevant_papers = search_arxiv_papers(keywords, max_results=5)
+    for paper in relevant_papers:
+        paper['title'] = re.sub(r'\W+', ' ', paper['title'])
+        paper['summary'] = re.sub(r'\W+', ' ', paper['summary'])
+    return ' '.join([paper['title'] for paper in relevant_papers]), ' '.join([paper['summary'] for paper in relevant_papers])
+
+def generate_base_models(url, paper_contents):
     models = {
         "deskreviewer": gen_desk_review_message(url),
         "reviewer1": reviewer_messages[0],
         "reviewer2": reviewer_messages[1],
         "reviewer3": reviewer_messages[2],
         "questioner": "Your job is to ask questions about this section. Your questions should be open-ended and should not be leading. Your questions should be about the paper and not about the authors. Your questions should be about the content of the paper and not about the presentation of the paper. Your questions should be about the paper and not about the conference. Your questions should be about the paper and not about the reviewers.",
-        "grammar": "You are a grammar checker. Review the section for grammar issues. Respond with [Accept] if the grammar is correct or [Reject] if there are issues, followed by specific corrections.",
+        "grammar": "Your job is to check the grammar of the paper. Your decisions have to be [Accept/Reject], where \"Accept\" means the grammar is correct and \"Reject\" means the grammar is incorrect. ONLY say \"Accept\" if the grammar is correct. ONLY say \"Reject\" if the grammar is incorrect.",
+        "test": "This is a test model. Please ignore this message.",
+        "novelty": f"Your job is to judge whether a paper is novel. Your decisions have to be [Accept/Reject], where \"Accept\" means the paper is novel and \"Reject\" means the paper is not novel. ONLY say \"Accept\" if the paper is novel. ONLY say \"Reject\" if the paper is not novel. Use these papers as a reference: {', '.join(gen_novelty_model(paper_contents)[0])}. Here are summaries of the papers: {', '.join(gen_novelty_model(paper_contents)[1])}.",
+        # "grammar": "You are a grammar checker. Review the section for grammar issues. Respond with [Accept] if the grammar is correct or [Reject] if there are issues, followed by specific corrections.",
     }
 
     for model, system in models.items():
