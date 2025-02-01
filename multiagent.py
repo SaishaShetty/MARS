@@ -6,6 +6,7 @@ import re
 import argparse
 from util.pdf_extract import pdf_pipeline
 from build_models import generate_base_models, generate_paper_models, isModelLoaded
+import json
 
 parser = argparse.ArgumentParser(description="MultiAgent paper review")
 parser.add_argument("url", type=str, help="Path to the Conference CFP")
@@ -67,7 +68,7 @@ def consultAgent(agent, question):
 def consultDeskReviewer(abstract):
     desk_review = consultAgent('deskreviewer', abstract)
     print(desk_review)
-    return 'accept' in desk_review.lower()
+    return 'accept' in desk_review.lower(), desk_review
 
 def consultReviewer1(abstract):
     review = consultAgent('reviewer1', abstract)
@@ -110,7 +111,20 @@ available_functions = {
     'consultNovelty': consultNovelty,
 }
 
-print(consultDeskReviewer(paper['Abstract']))
-print("QUESTION", consultQuestioner(paper['Abstract']))
-print("GRAMMAR", consultGrammar(paper['Abstract']))
-print(consultNovelty(paper['Abstract']))
+feedback = {}
+
+desk_Reviewe = consultDeskReviewer(paper['Abstract'])
+# consult all agents
+feedback['DeskReviewer'] = {}
+feedback['DeskReviewer']['Accept'] = desk_Reviewe[0]
+feedback['DeskReviewer']['Feedback'] = desk_Reviewe[1]
+feedback['Novelty'] = consultNovelty(paper['Abstract'])
+
+# write feedback to file
+with open('feedback_new.json', 'w') as f:
+    json.dump(feedback, f, indent=4)
+
+# print(consultDeskReviewer(paper['Abstract']))
+# print("QUESTION", consultQuestioner(paper['Abstract']))
+# print("GRAMMAR", consultGrammar(paper['Abstract']))
+# print(consultNovelty(paper['Abstract']))
