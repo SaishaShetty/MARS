@@ -58,13 +58,6 @@ python test.py https://www.example.com/cfp example_paper.pdf
   }
 }
 ```
-
-### Project Structure
-- **`test.py`**: Entry point for testing the paper review system.
-- **`pdf_test.py`**: Handles PDF parsing and section extraction.
-- **`build_models.py`**: Manages AI model creation and interaction.
-- **`requirements.txt`**: Lists all dependencies for the project.
-
 ### How It Works
 1. **PDF Parsing**:
    - Extracts sections such as Abstract, Introduction, Methods, Results, etc.
