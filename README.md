@@ -22,17 +22,17 @@ pip install -r requirements.txt
 ```
 
 ### Usage
-#### Test Run
+#### Run
 To test the system, use the following command:
 ```bash
-python test.py <cfp_url> <pdf_path>
+python multiagent.py <cfp_url> <pdf_path>
 ```
 - `<cfp_url>`: URL to the Conference Call for Papers (CFP).
 - `<pdf_path>`: Path to the PDF file of the research paper.
 
 #### Example
 ```bash
-python test.py https://www.example.com/cfp example_paper.pdf
+python multiagent.py https://www.example.com/cfp example_paper.pdf
 ```
 
 ### Outputs
