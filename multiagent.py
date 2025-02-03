@@ -188,26 +188,55 @@ available_functions = {
     'consultFactChecker': consultFactChecker,
 }
 
+# Consult all agents
 feedback = {}
 
-# consult all agents
-desk_Review = consultDeskReviewer(paper[list(paper.keys())[0]])
 feedback['DeskReviewer'] = {}
-feedback['DeskReviewer']['Accept'] = desk_Review[0]
-feedback['DeskReviewer']['Feedback'] = desk_Review[1]
+desk_review = consultDeskReviewer(paper[list(paper.keys())[0]])
+feedback['DeskReviewer'] = {
+    'Accept': desk_review[0],
+    'Feedback': desk_review[1]
+}
+
+feedback['Questions'] = {}
+feedback['Grammar'] = {}
 feedback['Novelty'] = {}
-feedback['Novelty']['Feedback'] = consultNovelty("Paper Info: \n " + paper[list(paper.keys())[0]] + "arXiv Similar Papers: \n" + similar_paper_data[0] + "arXiv Similar Papers Summary: \n" + similar_paper_data[1])
-if 'accept' in feedback['Novelty']['Feedback'].lower():
-    feedback['Novelty']['Accept'] = True
-else:
-    feedback['Novelty']['Accept'] = False
 feedback['FactChecker'] = {}
-feedback['FactChecker']['Feedback'] = consultFactChecker(paper[list(paper.keys())[0]])
-feedback['FactChecker']['Feedback'] = consultFactChecker("Text: \n" + paper[list(paper.keys())[0]] + " Facts: \n" + feedback['FactChecker']['Feedback'])
-if 'accept' in feedback['FactChecker']['Feedback'].lower():
-    feedback['FactChecker']['Accept'] = True
-else:
-    feedback['FactChecker']['Accept'] = False
+
+for i in paper_content:
+    feedback['Questions'][i.split()[0]] = consultQuestioner(paper_content[i])
+    
+    grammar_feedback = consultGrammar(paper_content[i])
+    feedback['Grammar'][i.split()[0]] = {
+        'Accept': 'accept' in grammar_feedback.lower(),
+        'Feedback': grammar_feedback
+    }
+    
+    feedback['Novelty'][i.split()[0]] = {}
+    feedback['Novelty'][i.split()[0]]['Feedback'] = consultNovelty(
+        "Paper Info:\n" + paper_content[i] + "\n" +
+        "arXiv Similar Papers:\n" + similar_paper_data[0] + "\n" +
+        "arXiv Similar Papers Summary:\n" + similar_paper_data[1]
+    )
+    feedback['Novelty'][i.split()[0]]['Accept'] = 'accept' in feedback['Novelty'][i.split()[0]]['Feedback'].lower()
+    
+    feedback['FactChecker'][i.split()[0]] = {}
+    fact_check_feedback = consultFactChecker(paper_content[i])
+    fact_check_feedback = consultFactChecker(
+        "Text:\n" + paper_content[i] + "\nFacts:\n" + fact_check_feedback
+    )
+    feedback['FactChecker'][i.split()[0]]['Feedback'] = fact_check_feedback
+    feedback['FactChecker'][i.split()[0]]['Accept'] = 'accept' in fact_check_feedback.lower()
+
+
+# for i in paper_content:
+#     feedback['Reviewer1'] = {}
+#     feedback['Reviewer1'][i] = consultReviewer1(paper_content[i])
+#     feedback['Reviewer2'] = {}
+#     feedback['Reviewer2'][i] = consultReviewer2(paper_content[i])
+#     feedback['Reviewer3'] = {}
+#     feedback['Reviewer3'][i] = consultReviewer3(paper_content[i])
+
 
 # write feedback to file
 with open('feedback_new.json', 'w') as f:
