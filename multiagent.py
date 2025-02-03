@@ -7,6 +7,7 @@ import argparse
 from util.pdf_extract import pdf_pipeline
 from build_models import generate_base_models, generate_paper_models, isModelLoaded
 import json
+from bs4 import BeautifulSoup
 
 parser = argparse.ArgumentParser(description="MultiAgent paper review")
 parser.add_argument("url", type=str, help="Path to the Conference CFP")
@@ -14,9 +15,13 @@ parser.add_argument("pdf_path", type=str, help="Path to the PDF file")
 args = parser.parse_args()
 
 paper = pdf_pipeline(args.pdf_path)
-keys = list(paper.keys())[1:-1]  # Skip the first and last keys
+if 'Abstract' in paper.keys():
+    keys = list(paper.keys())[1:-1] # Skip the first and last keys
+    similar_paper_data = generate_base_models(args.url, paper['Abstract'])
+else:
+    keys = list(paper.keys())
+    similar_paper_data = generate_base_models(args.url, paper[keys[0]])
 paper_content = {key: paper[key] for key in keys}
-generate_base_models(args.url, paper['Abstract'])
 generate_paper_models(paper_content)
 print(ollama.list().models)
 
@@ -27,30 +32,46 @@ def isModelLoaded(model):
 if not paper_content:
     print("Error: No content extracted from the PDF.")
     exit(1)
-    
+
 def consultWiki(question):
     print(f"Searching Wikipedia for: {question}")
-    url = f"https://en.wikipedia.org/w/api.php"
-    params = {
+    
+    search_url = "https://en.wikipedia.org/w/api.php"
+    search_params = {
         "action": "query",
         "format": "json",
         "list": "search",
         "srsearch": question,
         "srlimit": 1,
     }
-    response = requests.get(url, params=params)
+
+    response = requests.get(search_url, params=search_params)
     if response.status_code == 200:
         data = response.json()
-        if "query" in data and "search" in data["query"] and len(data["query"]["search"]) > 0:
-            top_result = data["query"]["search"][0]
-            title = top_result["title"]
-            snippet = re.sub(r'<[^>]*>', '', top_result["snippet"])
-            page_url = f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}"
-            return f"**{title}**\n{snippet}\n{page_url}"
-        else:
-            return "No results found on Wikipedia."
-    else:
-        return "Failed to fetch data from Wikipedia."
+        search_results = data.get("query", {}).get("search", [])
+
+        if search_results:
+            top_result = search_results[0]["title"]
+            page_url = f"https://en.wikipedia.org/wiki/{top_result.replace(' ', '_')}"
+            print(f"Fetching full content from: {page_url}")
+
+            # Fetch the full page HTML
+            html_url = f"https://en.wikipedia.org/api/rest_v1/page/html/{top_result.replace(' ', '_')}"
+            html_response = requests.get(html_url)
+
+            if html_response.status_code == 200:
+                soup = BeautifulSoup(html_response.text, "html.parser")
+
+                # Extract all paragraphs from the page
+                paragraphs = [p.get_text() for p in soup.find_all("p") if p.get_text()]
+                full_text = " ".join(paragraphs)
+
+                # Summarize (basic extractive approach)
+                summary = " ".join(full_text.split(". ")[:5])  # First 5 sentences
+
+                return f"**{top_result}**\n{summary}...\n[Read more]({page_url})"
+    
+    return "No results found on Wikipedia. Try using simpler keywords."
     
 def consultAgent(agent, question):
     # print("Consulting agent", agent, "with question", question)
@@ -97,6 +118,61 @@ def consultTest(text):
 def consultNovelty(text):
     return consultAgent('novelty', text)
 
+def consultFactChecker(text):
+    tool_config = {
+        "name": "consultWiki",
+        "type": "function",
+        "function": {
+            "name": "consultWiki",
+            "description": "Consult Wikipedia to check facts",
+            "parameters": {
+                "type": "object",
+                "required": ["question"],
+                "properties": {
+                    "question": {
+                        "type": "string",
+                        "description": "The question to ask Wikipedia"
+                    }
+                }
+            }
+        }
+    }
+    
+    retries = 3  # Set a max retry limit
+    query = text
+
+    response = chat(model='factchecker', messages=[{'role': 'user', 'content': "Do you need more facts? Only say yes or no. \n " + query}])
+    if 'yes' in response.message.content.lower():
+        
+        for attempt in range(retries):
+            response = chat(model='factchecker', messages=[{'role': 'user', 'content': query}], tools=[tool_config])
+            
+            print("Attempt number", attempt + 1)
+
+            if response.message.tool_calls:
+                for tool in response.message.tool_calls:
+                    if function_to_call := available_functions.get(tool.function.name):
+                        try:
+                            print("Asking " + tool.function.name + ": " + tool.function.arguments['question'])
+                        except:
+                            pass
+                        output = function_to_call(**tool.function.arguments)
+                        
+                        if output and output != "No results found on Wikipedia. Try using simpler keywords.":
+                            # new_query = "Question: \n" + query + " " + "Answer: \n" + output
+                            # print("new_query", new_query)
+                            # consultFactChecker(new_query)
+                            return output
+                        
+                        print("Refining query...")
+                        query = " ".join(re.findall(r'\b[A-Za-z0-9-]+\b', text)[:10]) # more specific query
+
+        print("Could not retrieve relevant information from Wikipedia after multiple attempts.")
+        return None
+    else:
+        response = chat(model='factchecker', messages=[{'role': 'user', 'content': "Do you accept the claims? Say 'Accept' if yes and 'Reject' if no. \n " + query}])
+        return response.message.content
+
 available_models = [model.model for model in ollama.list().models]
 
 available_functions = {
@@ -109,16 +185,29 @@ available_functions = {
     'consultGrammar': consultGrammar,
     'consultTest': consultTest,
     'consultNovelty': consultNovelty,
+    'consultFactChecker': consultFactChecker,
 }
 
 feedback = {}
 
-desk_Reviewe = consultDeskReviewer(paper['Abstract'])
 # consult all agents
+desk_Review = consultDeskReviewer(paper[list(paper.keys())[0]])
 feedback['DeskReviewer'] = {}
-feedback['DeskReviewer']['Accept'] = desk_Reviewe[0]
-feedback['DeskReviewer']['Feedback'] = desk_Reviewe[1]
-feedback['Novelty'] = consultNovelty(paper['Abstract'])
+feedback['DeskReviewer']['Accept'] = desk_Review[0]
+feedback['DeskReviewer']['Feedback'] = desk_Review[1]
+feedback['Novelty'] = {}
+feedback['Novelty']['Feedback'] = consultNovelty("Paper Info: \n " + paper[list(paper.keys())[0]] + "arXiv Similar Papers: \n" + similar_paper_data[0] + "arXiv Similar Papers Summary: \n" + similar_paper_data[1])
+if 'accept' in feedback['Novelty']['Feedback'].lower():
+    feedback['Novelty']['Accept'] = True
+else:
+    feedback['Novelty']['Accept'] = False
+feedback['FactChecker'] = {}
+feedback['FactChecker']['Feedback'] = consultFactChecker(paper[list(paper.keys())[0]])
+feedback['FactChecker']['Feedback'] = consultFactChecker("Text: \n" + paper[list(paper.keys())[0]] + " Facts: \n" + feedback['FactChecker']['Feedback'])
+if 'accept' in feedback['FactChecker']['Feedback'].lower():
+    feedback['FactChecker']['Accept'] = True
+else:
+    feedback['FactChecker']['Accept'] = False
 
 # write feedback to file
 with open('feedback_new.json', 'w') as f:

@@ -35,7 +35,8 @@ def generate_base_models(url, paper_contents):
         "questioner": "Your job is to ask questions about this section. Your questions should be open-ended and should not be leading. Your questions should be about the paper and not about the authors. Your questions should be about the content of the paper and not about the presentation of the paper. Your questions should be about the paper and not about the conference. Your questions should be about the paper and not about the reviewers.",
         "grammar": "Your job is to check the grammar of the paper. Your decisions have to be [Accept/Reject], where \"Accept\" means the grammar is correct and \"Reject\" means the grammar is incorrect. ONLY say \"Accept\" if the grammar is correct. ONLY say \"Reject\" if the grammar is incorrect.",
         "test": "This is a test model. Please ignore this message.",
-        "novelty": f"Your job is to judge whether a paper is novel. Your decisions have to be [Accept/Reject], where \"Accept\" means the paper is novel and \"Reject\" means the paper is not novel. ONLY say \"Accept\" if the paper is novel. ONLY say \"Reject\" if the paper is not novel. Use these papers as a reference: {', '.join(gen_novelty_model(paper_contents)[0])}. Here are summaries of the papers: {', '.join(gen_novelty_model(paper_contents)[1])}. You can use these papers to JUDGE the novelty of the paper. State how the paper is similar and different from these papers.",  
+        "novelty": f"Your job is to judge whether a paper is novel. Your decisions have to be [Accept/Reject], where \"Accept\" means the paper is novel and \"Reject\" means the paper is not novel. Say \"Accept\" if the paper is novel. Say \"Reject\" if the paper is not novel. Use all the information in the prompt to make your decision and tell why you chose what you chose.", 
+        "factchecker": "You are a fact checker. Respond with [Accept] if the facts are correct or [Reject] if there are inaccuracies, followed by specific corrections. You should use Wikipedia as a reference. If you are satisfied with the facts, respond with [Accept]. If you find inaccuracies, respond with [Reject] and provide corrections. You do NOT have to always ASK WIKIPEDIA. Also, give your own take on the facts.",
         # "grammar": "You are a grammar checker. Review the section for grammar issues. Respond with [Accept] if the grammar is correct or [Reject] if there are issues, followed by specific corrections.",
     }
 
@@ -48,7 +49,7 @@ def generate_base_models(url, paper_contents):
             ollama.delete(model=model)
             ollama.create(model=model, from_="llama3.2", system=system, parameters={"num_ctx": 4096, "temperature": 0.7})
 
-    return None
+    return gen_novelty_model(paper_contents)
 
 """def generate_paper_models(paper_contents):
 
