@@ -70,13 +70,16 @@ def generate_base_models(url, paper_contents):
     return None"""
 
 def generate_paper_models(paper_contents):
+    paper_keys = []
     for key, value in paper_contents.items():
         key = key.replace("\n", "").replace(" ", "")[:10]
         if not isModelLoaded(key):
             print(f"Creating model {key}")
+            paper_keys.append(key)
             ollama.create(model=key, from_="llama3.2", system=value, parameters={"num_ctx": 4096, "temperature": 0.7})
         else:
             print(f"Recreating model {key}")
             ollama.delete(model=key)
+            paper_keys.append(key)
             ollama.create(model=key, from_="llama3.2", system=value, parameters={"num_ctx": 4096, "temperature": 0.7})
-    return None
+    return paper_keys

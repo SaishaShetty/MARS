@@ -22,7 +22,11 @@ else:
     keys = list(paper.keys())
     similar_paper_data = generate_base_models(args.url, paper[keys[0]])
 paper_content = {key: paper[key] for key in keys}
-generate_paper_models(paper_content)
+paper_specific_models = generate_paper_models(paper_content)
+print(paper_specific_models)
+with open('paper_specific_models.txt', 'w') as f:
+    for model in paper_specific_models:
+        f.write(model + '\n')
 print(ollama.list().models)
 
 def isModelLoaded(model):
@@ -105,6 +109,9 @@ def consultReviewer3(abstract):
     review = consultAgent('reviewer3', abstract)
     print(review)
     return review.split(' ')[0]
+
+def consultPaperSpecificModels(model, question):
+    return consultAgent(model, question)
 
 def consultQuestioner(text):
     return consultAgent('questioner', text)
@@ -223,10 +230,30 @@ for i in paper_content:
     feedback['FactChecker'][i.split()[0]] = {}
     fact_check_feedback = consultFactChecker(paper_content[i])
     fact_check_feedback = consultFactChecker(
-        "Text:\n" + paper_content[i] + "\nFacts:\n" + fact_check_feedback
+        "Text:\n" + paper_content[i] + "\nFacts:\n" + str(fact_check_feedback)
     )
     feedback['FactChecker'][i.split()[0]]['Feedback'] = fact_check_feedback
     feedback['FactChecker'][i.split()[0]]['Accept'] = 'accept' in fact_check_feedback.lower()
+
+
+# feedback['Answers'] = {}
+
+# for i in feedback['Questions']:
+#     questions = feedback['Questions'][i].split('?')
+#     model_name = i
+#     feedback['Answers'][model_name] = {}
+#     for j in range(len(questions)):
+#         questions[j] = questions[j].strip()
+#         feedback['Answers'][model_name][models] = []
+#         for models in paper_specific_models:
+#             if model_name==models:
+#                 continue
+#             else:
+#                 answer = consultPaperSpecificModels(models, "Answer the following question with respect to your system message (what you know). If you have no answer, say 'No answer'.\n" + questions[j])
+#                 feedback['Answers'][model_name][models].append({
+#                     'Question': questions[j],
+#                     'Answer': answer
+#                 })
 
 
 # for i in paper_content:
