@@ -76,6 +76,9 @@ python multiagent.py https://www.example.com/cfp example_paper.pdf
 - **`pdf_test.py`**: Handles PDF parsing and section extraction.
 - **`build_models.py`**: Manages AI model creation and interaction.
 - **`requirements.txt`**: Lists all dependencies for the project.
+- **`review_colab/`**: Contains files for review collaboration.
+   - **`reviewer.py`**: Defines reviewer classes and functions.
+   - **`review_collab.py`**: Reviewers communicate with each other and provide feedback and summary.
 - **`util/`**: Contains utility scripts for various tasks.
   - **`extract_cfp.py`**: Extracts topics from CFP.
   - **`extract_keywords.py`**: Extracts keywords from text.
