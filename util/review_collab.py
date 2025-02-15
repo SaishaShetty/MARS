@@ -2,7 +2,7 @@ import ollama
 import argparse
 from PyPDF2 import PdfReader
 import re
-from reviewer import assigned_reviewers  
+from util.reviewer import assigned_reviewers  
 
 def parse_pdf_to_text(pdf_path):
     """Extract text from a PDF file."""
