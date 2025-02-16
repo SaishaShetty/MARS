@@ -78,7 +78,7 @@ python multiagent.py https://www.example.com/cfp example_paper.pdf
 - **`pdf_test.py`**: Handles PDF parsing and section extraction.
 - **`build_models.py`**: Manages AI model creation and interaction.
 - **`requirements.txt`**: Lists all dependencies for the project.
-- **`feedback_files`**:Contains list of feedback json files.
+- **`feedback_files/`**:Contains list of feedback json files.
 - **`util/`**: Contains utility scripts for various tasks.
   - **`extract_cfp.py`**: Extracts topics from CFP.
   - **`extract_keywords.py`**: Extracts keywords from text.
