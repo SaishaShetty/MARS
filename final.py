@@ -8,8 +8,9 @@ from bs4 import BeautifulSoup
 from util.review_collab import parse_pdf_to_text, clean_text, extract_section, split_text_into_sections
 from build_models import generate_base_models, generate_paper_models
 from util.review_collab import extract_section, reviewer_agent, summarizer 
-from multiagent import consultGrammar as consult_grammar, consultNovelty as consult_novelty, consultFactChecker as fact_checker, consultWiki as consult_wikipedia, consultQuestioner as consult_question, consultTest as consult_test  
+from multiagent import consultGrammar as consult_grammar, consultNovelty as consult_novelty, consultFactChecker as fact_checker, consultWiki as consult_wikipedia, consultQuestioner as consult_question, consultTest as consult_test, consultDeskReviewer as consult_desk_reviewer 
 from util.reviewer import assigned_reviewers
+import time
 
 # ---- SUPER FANCY ADDITIONS ----
 # Import an advanced summarization pipeline and sentiment analyzer
@@ -65,6 +66,17 @@ if args.section_name:
 else:
     # Process all sections that haven't been processed yet.
     sections_to_process = [section[0] for section in sections if section[0] not in processed_sections]
+# add deskreviewer review
+
+start_time = time.time()
+
+all_section_reviews['DeskReviewer'] = {}
+desk_review = consult_desk_reviewer(args.url)
+all_section_reviews['DeskReviewer']['Review'] = desk_review[1]
+all_section_reviews['DeskReviewer']['Accept'] = desk_review[0]
+
+with open('feedback_collab.json', 'w') as f:
+    json.dump(all_section_reviews, f, indent=4)
 
 if not sections_to_process:
     print("\nNo new sections to process. Exiting.")
@@ -142,6 +154,7 @@ for section_name in sections_to_process:
 
     # Continue with other consultations.
     # wiki_info = consult_wikipedia(section_text)
+
     grammar_feedback = consult_grammar(section_text)
     novelty_feedback = consult_novelty(section_text)
     fact_check_feedback = fact_checker(section_text)
@@ -177,6 +190,10 @@ for section_name in sections_to_process:
     checkpoint_progress(sections, all_section_reviews)
 
 print("\nAll new sections processed. Final checkpoint saved.")
+
+time_taken = time.time() - start_time
+
+print(f"\nTotal time taken: {time_taken:.2f} seconds")
 
 with open('paper_specific_models.txt', 'w') as f:
     for key in paper_specific_models:
