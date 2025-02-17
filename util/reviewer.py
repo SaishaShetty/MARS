@@ -60,7 +60,7 @@ class Reviewer:
 
 def assign_reviewers():
     assigned_reviewers = []
-    while len(assigned_reviewers) < 3:
+    while len(assigned_reviewers) < 4:
         reviewer = Reviewer(f"Reviewer {random.randint(1, 100)}")
         if reviewer.conflict_of_interest == "None":
             assigned_reviewers.append(reviewer)

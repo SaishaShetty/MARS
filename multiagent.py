@@ -9,33 +9,9 @@ from build_models import generate_base_models, generate_paper_models, isModelLoa
 import json
 from bs4 import BeautifulSoup
 
-parser = argparse.ArgumentParser(description="MultiAgent paper review")
-parser.add_argument("url", type=str, help="Path to the Conference CFP")
-parser.add_argument("pdf_path", type=str, help="Path to the PDF file")
-args = parser.parse_args()
-
-paper = pdf_pipeline(args.pdf_path)
-if 'Abstract' in paper.keys():
-    keys = list(paper.keys())[1:-1] # Skip the first and last keys
-    similar_paper_data = generate_base_models(args.url, paper['Abstract'])
-else:
-    keys = list(paper.keys())
-    similar_paper_data = generate_base_models(args.url, paper[keys[0]])
-paper_content = {key: paper[key] for key in keys}
-paper_specific_models = generate_paper_models(paper_content)
-print(paper_specific_models)
-with open('paper_specific_models.txt', 'w') as f:
-    for model in paper_specific_models:
-        f.write(model + '\n')
-print(ollama.list().models)
-
 def isModelLoaded(model):
     loaded_models = [model.model for model in ollama.list().models]
     return model in loaded_models or f"{model}:latest" in loaded_models
-
-if not paper_content:
-    print("Error: No content extracted from the PDF.")
-    exit(1)
 
 def consultWiki(question):
     print(f"Searching Wikipedia for: {question}")
@@ -195,47 +171,72 @@ available_functions = {
     'consultFactChecker': consultFactChecker,
 }
 
-# Consult all agents
-feedback = {}
+def main():
+    parser = argparse.ArgumentParser(description="MultiAgent paper review")
+    parser.add_argument("url", type=str, help="Path to the Conference CFP")
+    parser.add_argument("pdf_path", type=str, help="Path to the PDF file")
+    args = parser.parse_args()
 
-feedback['DeskReviewer'] = {}
-desk_review = consultDeskReviewer(paper[list(paper.keys())[0]])
-feedback['DeskReviewer'] = {
-    'Accept': desk_review[0],
-    'Feedback': desk_review[1]
-}
+    paper = pdf_pipeline(args.pdf_path)
+    if 'Abstract' in paper.keys():
+        keys = list(paper.keys())[1:-1] # Skip the first and last keys
+        similar_paper_data = generate_base_models(args.url, paper['Abstract'])
+    else:
+        keys = list(paper.keys())
+        similar_paper_data = generate_base_models(args.url, paper[keys[0]])
+    paper_content = {key: paper[key] for key in keys}
+    paper_specific_models = generate_paper_models(paper_content)
+    print(paper_specific_models)
+    with open('paper_specific_models.txt', 'w') as f:
+        for model in paper_specific_models:
+            f.write(model + '\n')
+    print(ollama.list().models)
 
-feedback['Questions'] = {}
-feedback['Grammar'] = {}
-feedback['Novelty'] = {}
-feedback['FactChecker'] = {}
+    if not paper_content:
+        print("Error: No content extracted from the PDF.")
+        exit(1)
+    # Consult all agents
+    feedback = {}
 
-for i in paper_content:
-    feedback['Questions'][i.split()[0]] = consultQuestioner(paper_content[i])
-    
-    grammar_feedback = consultGrammar(paper_content[i])
-    feedback['Grammar'][i.split()[0]] = {
-        'Accept': 'accept' in grammar_feedback.lower(),
-        'Feedback': grammar_feedback
+    feedback['DeskReviewer'] = {}
+    desk_review = consultDeskReviewer(paper[list(paper.keys())[0]])
+    feedback['DeskReviewer'] = {
+        'Accept': desk_review[0],
+        'Feedback': desk_review[1]
     }
-    
-    feedback['Novelty'][i.split()[0]] = {}
-    feedback['Novelty'][i.split()[0]]['Feedback'] = consultNovelty(
-        "Paper Info:\n" + paper_content[i] + "\n" +
-        "arXiv Similar Papers:\n" + similar_paper_data[0] + "\n" +
-        "arXiv Similar Papers Summary:\n" + similar_paper_data[1]
-    )
-    feedback['Novelty'][i.split()[0]]['Accept'] = 'accept' in feedback['Novelty'][i.split()[0]]['Feedback'].lower()
-    
-    feedback['FactChecker'][i.split()[0]] = {}
-    fact_check_feedback = consultFactChecker(paper_content[i])
-    fact_check_feedback = consultFactChecker(
-        "Text:\n" + paper_content[i] + "\nFacts:\n" + str(fact_check_feedback)
-    )
-    feedback['FactChecker'][i.split()[0]]['Feedback'] = fact_check_feedback
-    feedback['FactChecker'][i.split()[0]]['Accept'] = 'accept' in fact_check_feedback.lower()
 
+    feedback['Questions'] = {}
+    feedback['Grammar'] = {}
+    feedback['Novelty'] = {}
+    feedback['FactChecker'] = {}
 
+    for i in paper_content:
+        feedback['Questions'][i.split()[0]] = consultQuestioner(paper_content[i])
+        
+        grammar_feedback = consultGrammar(paper_content[i])
+        feedback['Grammar'][i.split()[0]] = {
+            'Accept': 'accept' in grammar_feedback.lower(),
+            'Feedback': grammar_feedback
+        }
+        
+        feedback['Novelty'][i.split()[0]] = {}
+        feedback['Novelty'][i.split()[0]]['Feedback'] = consultNovelty(
+            "Paper Info:\n" + paper_content[i] + "\n" +
+            "arXiv Similar Papers:\n" + similar_paper_data[0] + "\n" +
+            "arXiv Similar Papers Summary:\n" + similar_paper_data[1]
+        )
+        feedback['Novelty'][i.split()[0]]['Accept'] = 'accept' in feedback['Novelty'][i.split()[0]]['Feedback'].lower()
+        
+        feedback['FactChecker'][i.split()[0]] = {}
+        fact_check_feedback = consultFactChecker(paper_content[i])
+        fact_check_feedback = consultFactChecker(
+            "Text:\n" + paper_content[i] + "\nFacts:\n" + str(fact_check_feedback)
+        )
+        feedback['FactChecker'][i.split()[0]]['Feedback'] = fact_check_feedback
+        feedback['FactChecker'][i.split()[0]]['Accept'] = 'accept' in fact_check_feedback.lower()
+
+        with open('feedback_new.json', 'w') as f:
+            json.dump(feedback, f, indent=4)
 # feedback['Answers'] = {}
 
 # for i in feedback['Questions']:
@@ -264,10 +265,6 @@ for i in paper_content:
 #     feedback['Reviewer3'] = {}
 #     feedback['Reviewer3'][i] = consultReviewer3(paper_content[i])
 
-
-# write feedback to file
-with open('feedback_new.json', 'w') as f:
-    json.dump(feedback, f, indent=4)
 
 # print(consultDeskReviewer(paper['Abstract']))
 # print("QUESTION", consultQuestioner(paper['Abstract']))

@@ -72,12 +72,12 @@ for reviewer in assigned_reviewers:
     You are {reviewer.experience_level} reviewer with {reviewer.knowledge_level} expertise.
     Your feedback tone is {reviewer.tone}.
     You have no conflict of interest.
-    Your decisions may include: [Strong Accept, Accept, Weak Accept, Weak Reject, Strong Reject].
+    Your decisions may include: [Accept, Reject].
     At the end of your review, provide a final decision based on your critique.
     """
     reviewer_messages.append(message)
 
-def reviewer_agent(reviewer, section_text, previous_feedback=None):
+def reviewer_agent(reviewer, section_text, model, previous_feedback=None):
     """LLM agent that reviews a section based on assigned reviewer attributes and provides a decision."""
     prompt = f"""
     {reviewer_messages[assigned_reviewers.index(reviewer)]}
@@ -91,9 +91,9 @@ def reviewer_agent(reviewer, section_text, previous_feedback=None):
     If you agree with a previous reviewer, elaborate on why.
     If you disagree, provide justification and alternative suggestions.
     
-    🔹 **At the end of your review, explicitly state your final decision (Strong Accept, Accept, Weak Accept, Weak Reject, Strong Reject).**
+    🔹 **At the end of your review, explicitly state your final decision (Accept, Reject).**
     """
-    response = ollama.chat(model="mistral", messages=[{"role": "user", "content": prompt}])
+    response = ollama.chat(model=model, messages=[{"role": "user", "content": prompt}])
     return response['message']['content']
 
 def summarizer(section_text, reviews):
@@ -107,7 +107,7 @@ def summarizer(section_text, reviews):
 
     Format the summary as if recording minutes of a meeting. Highlight agreements, disagreements, and key takeaways.
     
-    🔹 **At the end, determine the final decision based on the majority vote (Strong Accept, Accept, Weak Accept, Weak Reject, Strong Reject).**
+    🔹 **At the end, determine the final decision based on the majority vote (Accept, Reject).**
     """
     response = ollama.chat(model="mistral", messages=[{"role": "user", "content": prompt}])
     return response['message']['content']

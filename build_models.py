@@ -71,7 +71,7 @@ def generate_base_models(url, paper_contents):
 
 def generate_paper_models(paper_contents):
     paper_keys = []
-    for key, value in paper_contents.items():
+    for key, value in paper_contents:
         key = key.replace("\n", "").replace(" ", "")[:10]
         if not isModelLoaded(key):
             print(f"Creating model {key}")
