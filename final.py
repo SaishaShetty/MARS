@@ -71,7 +71,7 @@ else:
 start_time = time.time()
 
 all_section_reviews['DeskReviewer'] = {}
-desk_review = consult_desk_reviewer(args.url)
+desk_review = consult_desk_reviewer(sections[0][1])
 all_section_reviews['DeskReviewer']['Review'] = desk_review[1]
 all_section_reviews['DeskReviewer']['Accept'] = desk_review[0]
 

@@ -3,6 +3,7 @@ import re
 from ollama import chat
 from ollama import ChatResponse
 from build_models import isModelLoaded
+import time
 
 def consultAgent(agent, question):
     print(f"Attempting to consult agent: '{agent}' with question: '{question}'")
@@ -41,6 +42,7 @@ print(json.dumps(list(feedback.keys()), indent=2))
 if 'Answers' not in feedback:
     feedback['Answers'] = {}
 
+start_time = time.time()
 # Process each section
 for section_name, section_data in feedback['Section Reviews'].items():
     if section_name in feedback['Answers']:
@@ -72,5 +74,8 @@ for section_name, section_data in feedback['Section Reviews'].items():
         json.dump(feedback, f, indent=4)
 
     print(f"Checkpoint saved after processing section: {section_name}")
+
+
+print(f"\nAll sections processed in {time.time() - start_time:.2f} seconds")
 
 print("\nFinal answers have been saved to feedback_collab_with_answers.json")
