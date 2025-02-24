@@ -143,14 +143,14 @@ for section_name in sections_to_process:
     # ---- END SUPER FANCY AGGREGATION ----
 
     # Optional Human-in-the-Loop check if conflicts are detected.
-    if any("conflict" in review.lower() for review in review_outputs.values()):
-        print("\n**Potential conflict detected in reviews. Human oversight required.**")
-        override = input("Do you want to override the aggregated review? (y/n): ")
-        if override.lower() == 'y':
-            aggregated_review = input("Enter your revised aggregated review: ")
-            print("\nHuman revised aggregated review recorded.")
-        else:
-            print("\nProceeding with automated aggregated review.")
+    # if any("conflict" in review.lower() for review in review_outputs.values()):
+    #     print("\n**Potential conflict detected in reviews. Human oversight required.**")
+    #     override = input("Do you want to override the aggregated review? (y/n): ")
+    #     if override.lower() == 'y':
+    #         aggregated_review = input("Enter your revised aggregated review: ")
+    #         print("\nHuman revised aggregated review recorded.")
+    #     else:
+    #         print("\nProceeding with automated aggregated review.")
 
     # Continue with other consultations.
     # wiki_info = consult_wikipedia(section_text)
