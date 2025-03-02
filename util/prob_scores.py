@@ -60,12 +60,8 @@ def extract_score(review_obj):
 
 def determine_verdict(score):
     """Determines the final verdict based on average section score."""
-    if score >= 85:
+    if score >= 50:
         return "Accept"
-    elif 70 <= score < 85:
-        return "Minor Revisions"
-    elif 50 <= score < 70:
-        return "Major Revisions"
     else:
         return "Reject"
 
