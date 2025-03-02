@@ -1,0 +1,28 @@
+{
+  "output": [
+    [
+      "1. \"The motivation of the proposed method for federated learning does not seem to be super strong.\"",
+      "2. \"The local training, querying and retraining approach is taken as granted. However, it is not clear to me that this should be the default, or even a popular algorithm for so-called heterogeneous FL.\"",
+      "3. \"The authors cited (Li & Wang, 2019; Zhu et al., 2021), but the approaches in the two papers seem to be different from Figure 1 (without considering the encryption).\"",
+      "4. \"I would encourage the authors to think about ways to justify the training paradigm, and make stronger connections between the training paradigm and the proposed method.\"",
+      "5. \"I would also encourage the authors to discuss more about the application setting, and limitation of the proposed method.\"",
+      "6. \"GuardHFL assumes the communication between clients and server are stable with possibly multiple communication targeted specific clients (query and answer), which seems to be only applicable to the cross-silo FL, not cross-device FL.\"",
+      "7. \"Algorithm 1 line 4-14 also seems to suggest a large communication cost.\""
+    ],
+    [
+      "1. Secure model predictions requires customized design for particular model architectures. I am wondering how to deal with some privacy-sensitive layers, like for example, batch normalization.",
+      "2. It would be better if this paper could provide some attacks from an adversary perspective to demonstrate privacy."
+    ],
+    [
+      "1. \"Not enough attention is given to privacy issues regarding the dataset used for local training (line 13 in Algorithm 1).\"",
+      "2. \"If this dataset is useful to the model it intuitively must leak something about the other parties' datasets, and if it doesn't, how can it improve the model?\"",
+      "3. \"I don't think it's entirely fair to compare to prior work where the training happens completely in private.\""
+    ]
+  ],
+  "review_num": 3,
+  "item_num": [
+    7,
+    2,
+    3
+  ]
+}

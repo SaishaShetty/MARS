@@ -37,14 +37,13 @@ def compute_rouge_l(reference, generated):
     return f1_score
 
 # Load JSON files
-file1_path = "/Users/saishashetty/Desktop/litai/dataset_results/TwoLayerReLURisk_6doXHqwMayf.json"
-file2_path = "/Users/saishashetty/Desktop/litai/human_reviews/TwoLayerReLURisk_6doXHqwMayf.json"
+file1_path = "/Users/saishashetty/Desktop/litai/dataset_results/VariationalImbalancedRegression-ltZ1uw8ZE7.json"
+file2_path = "/Users/saishashetty/Desktop/litai/human_reviews/VariationalImbalancedRegression-ltZ1uw8ZE7.json"
 
 with open(file1_path, "r") as f1, open(file2_path, "r") as f2:
     data1 = json.load(f1)
     data2 = json.load(f2)
 
-# Extract reviewer comments from first file
 section_reviews = []
 if "Section Reviews" in data1:
     for section, content in data1["Section Reviews"].items():
@@ -52,7 +51,6 @@ if "Section Reviews" in data1:
             combined_review = " ".join(content["Reviewers"].values())
             section_reviews.append((section, combined_review))
 
-# Extract corresponding output comments from second file
 reviewer_comments = []
 if "output" in data2:
     for review_group in data2["output"]:
@@ -79,7 +77,7 @@ bleu_scores, rouge_l_scores, meteor_scores = [], [], []
 for section, ref, gen in best_matches:
     bleu_score = sentence_bleu([ref.split()], gen.split(), smoothing_function=smoothing)
     rouge_l_score = compute_rouge_l(ref, gen)
-    meteor = meteor_score([ref.split()], gen.split())  # Fix: Tokenize input
+    meteor = meteor_score([ref.split()], gen.split()) 
     
     bleu_scores.append(bleu_score)
     rouge_l_scores.append(rouge_l_score)
@@ -90,7 +88,6 @@ average_bleu = sum(bleu_scores) / len(bleu_scores) if bleu_scores else 0
 average_rouge_l = sum(rouge_l_scores) / len(rouge_l_scores) if rouge_l_scores else 0
 average_meteor = sum(meteor_scores) / len(meteor_scores) if meteor_scores else 0
 
-# Store results in DataFrame
 results_df = pd.DataFrame({
     "Section": [s[0] for s in best_matches],
     "Reference Text": [s[1] for s in best_matches],
@@ -100,10 +97,9 @@ results_df = pd.DataFrame({
     "METEOR Score": meteor_scores
 })
 
-# Save individual results to CSV
+
 results_df.to_csv("evaluation_results.csv", index=False)
 
-# Save overall scores to a separate CSV file and append if exists
 overall_scores_file = "overall_scores.csv"
 overall_scores_df = pd.DataFrame({
     "File Name": [file2_path],
@@ -118,10 +114,10 @@ if os.path.exists(overall_scores_file):
 
 overall_scores_df.to_csv(overall_scores_file, index=False)
 
-# Print top results
-print(results_df.head())
 
-# Print overall scores
-print(f"Overall BLEU Score: {average_bleu:.4f}")
-print(f"Overall ROUGE-L Score: {average_rouge_l:.4f}")
-print(f"Overall METEOR Score: {average_meteor:.4f}")
+#print(results_df.head())
+
+
+#print(f"Overall BLEU Score: {average_bleu:.4f}")
+#print(f"Overall ROUGE-L Score: {average_rouge_l:.4f}")
+#print(f"Overall METEOR Score: {average_meteor:.4f}")

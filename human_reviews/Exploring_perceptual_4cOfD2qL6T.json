@@ -1,0 +1,26 @@
+{
+  "output": [
+    [
+      "1. The claims about robustness are weak because only adversarial training is used while there are other ways to enforce robustness.",
+      "2. The authors failed to explain why \"curvature is a useful way of evaluating neural networks representations\"."
+    ],
+    [
+      "1. While the study is motivated by finding in biological system, it\u2019s unclear why perceptual straightness is a desirable property from a machine learning perspective. It would be nice to identify a set of tasks where improved straightness has a benefit, beyond adversarial robustness.",
+      "2. What is the impact of the dataset distribution on which we compute the output curvature? The evaluation protocol only uses 12 videos to compute this metric. Would the finding remain stable if we were to use different videos?",
+      "3. Videos are most likely out-of-distribution with respect to the training dataset. Would the finding be similar if we were to reduce the distribution shift between training and evaluation?"
+    ],
+    [
+      "1. Significance of the contribution to representation learning:",
+      "2. Non-matching models in robust and non-robust class:",
+      "3. If the above conditions of varying adversarial training in an isolated manner was what was performed for this analysis, I would suggest the authors please make this clear in writing.\"",
+      "3. Hard to understand model specifications from legends:",
+      "4. Discussion section:"
+    ]
+  ],
+  "review_num": 3,
+  "item_num": [
+    2,
+    3,
+    5
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "output": [
+    [
+      "1. **Variational Alignment Predictor**:",
+      "2. **Comparison to Other Duration Models**:",
+      "3. **Comparison with EFTS**:",
+      "4. **CMOS Tests**:",
+      "5. **End-to-End TTS Model Claim**:",
+      "6. **Hand-Designed Representations**:",
+      "7. **Control Features**:"
+    ],
+    [
+      "1. Marginal improvement in parameter efficiency (0.87x inference params of VITS) and inference speed (1.5x faster than VITS)",
+      "2. The motivation of a differentiable aligner is not well addressed in the result section.",
+      "3. In Figure 3, the F0 contour of EFTS2 does not seem stable. Please provide the samples with diverse t1 and t2.",
+      "4. Why not provide multi-speaker TTS results for EFTS 2-VC even though it uses a text encoder?"
+    ],
+    [
+      "1. Synthesis efficiency improved, but the quality seems to have degraded."
+    ]
+  ],
+  "review_num": 3,
+  "item_num": [
+    7,
+    4,
+    1
+  ]
+}

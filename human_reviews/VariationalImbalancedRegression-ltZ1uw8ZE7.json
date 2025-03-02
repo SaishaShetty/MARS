@@ -1,0 +1,46 @@
+{
+  "output": [
+    [
+      "1. **Related works:** \"The paper misses many important related works for uncertainty estimation for regression like [1, 2, 3, 4, 5, 6, 7] but also many others. This includes very common baselines like Dropout [6]\u00a0and Ensemble [1] which work for regression. The paper also does not discuss GP-based methods [2, 3] which can be used for regression. Further, the paper does not discuss Posterior Networks methods [4, 5, 7]. More specifically, [4, 5] shares many similarities with VIR. They use conjugate distributions, pseudo-count interpretations, posterior updates, and variational losses which are key parts of VIR. NatPN is also designed to work for regression.\"",
+      "2. **Desiderata:** \"The two desiderata are sometimes not clear. It feels that the two desiderata are high quality uncertainty estimation and high performance on imbalanced dataset. However the paper mentions that the desiderata are \u201cperformance improvement and uncertainty estimation\u201d. The paper also phrases the identification of the desiderata of imbalanced dataset and uncertainty estimation as a contribution.  However people already looked at imbalanced datasets and uncertainty estimation separately in previous works. Finally, the paper does not discuss existing desiderata for uncertainty estimation [8, 7, 9].\"",
+      "3. **Loss:** \"I felt that the description of the loss was sometimes confusing. I would be interested in the derivation fo the loss. This could also be provided in the appendix. In eq.(1), what is p_\\theta(z_i) ? Does this ELBO loss assume any prior ? What is the importance of the regularization loss in the total loss ?\"",
+      "4. **Clarity:** \"The paper is sometimes hard to read. E.g. the paper mentions multiple times \u201csee below\u201d which leaves unclear where to exactly find the missing information.\"",
+      "5. **Bins:** \"It is unclear what is the sensitivity of the method to the number of bins. It was also unclear to me when readin sec. 3.1. what data are used to build the mean representation from the bins.\"",
+      "6. **Experiences:** \"The experiments do not look very extensive to me. They consider only two datasets and a single backbone network. They do not compare to DropOut, Ensemble, GP, or NatPN which would be appropriate baselines. They do not look at common uncertainty estimation metrics like OOD detection scores. They also do not provide error bars which are key to assess the significance of the results.\""
+    ],
+    [
+      "1. In Section 3, the authors declare some limitations of LDS and DER. However, the descriptions are somewhat confusing. In my opinion, the authors should provide theoretical perspectives or specific cases for the limitations, thus illustrating the advantage of VIR.",
+      "2. Since the I.I.D. assumption has been replaced with the N.I.D. assumption, some theoretical guarantees could be provided to further demonstrate the effectiveness of the algorithm.",
+      "3. The impact of \u03bb is unclear. Further ablation studies should be conducted to illustrate the impact of \u03bb.",
+      "4. One can observe in Table 4 that the uncertainty estimation performance of the proposed VIR is worse than LDS+FDS+DER on Medium labels. The authors should further analyze the reasons for this phenomenon."
+    ],
+    [
+      "1. I think the paper can benefit from providing more practical guidance on implementing the proposed method.",
+      "2. For example, how to select the number of bins B in Section 3.1?",
+      "3. Why is it a good idea to partition the label space Y into equal-interval bins, but not equal-size bins (with the same number of data points)?",
+      "4. How to select the bandwidth in the kernel function k(\u22c5) to compute the neighboring data and smoothed statistics in Section 3.3?",
+      "5. How does the bandwidth vary with the sample size N?",
+      "6. In addition, can the authors provide some theoretical guarantee (e.g., unbiasedness, consistency) on the proposed method?"
+    ],
+    [
+      "1. The intuition that each of the components of the proposed method works for their purpose is not described well in the main text.",
+      "2. For example, there is no overall procedure for their reweighting technique, which is provided in the paper (Yang et al., 2021) though.",
+      "3. In Section 3.3, the authors proposed to use the covariance of z for probabilistic overall covariance. However, it is unclear why they do not use the covariance of z^{mu} and z^{sigma} instead.",
+      "4. There is no intuition why the proposed approach outperformed DIR, which could be more practical in terms of prediction performance in some cases, in my understanding."
+    ],
+    [
+      "1. Considering the novelty, I think VIR is more like a combination of [1] and [2] from the current manuscript. Though VIR is empirically superior and introduces uncertainty estimation as a byproduct, it is still vague how VIR is motivated compared to the FDS in [1], since both methods have kernel estimation as the core contribution. And the idea of extending deterministic space to a probabilistic one is interesting but lacks more motivation.",
+      "2. Missing related work [3, 4]. Both were published before the submission deadline and the authors should discuss the difference and compare VIR with them.",
+      "3. The experimental setup can be improved. First, the authors only choose two age estimation datasets whose distributions are similar. Second, the reported numbers are not very convincing (please see the next section for quality and reproducibility).",
+      "4. I\u2019m not fully convinced by the choice of Gaussian distribution as the prior distribution. For some specific datasets with regression labels like ages, this may possibly be a suitable assumption. But the authors claim the contributions to the task of general deep imbalanced regression, so I encourage the authors to conduct experiments on other types of regression datasets. It will strongly improve the contribution of this work if the authors can consider more datasets proposed in [1] or [3]."
+    ]
+  ],
+  "review_num": 5,
+  "item_num": [
+    6,
+    4,
+    6,
+    4,
+    4
+  ]
+}

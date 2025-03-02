@@ -1,0 +1,50 @@
+{
+  "output": [
+    [
+      "1. The novelty is not significant.",
+      "2. Both l1 and l2 regularizations are mature techniques in statistics, and deep neural network training.",
+      "3. I do not find this method very interesting.",
+      "4. Using Lasso to get sparsity is doable, but is very tricky to tune and leads to biased gradient estimation which would hurt the model performance.",
+      "5. The theory (Theorem 3.1) containing a nonvanishing constant is worse than the baseline FL rate.",
+      "6. Empirical performance might also be worse in some cases as we see from the figures.",
+      "7. The proposed method seems not very valuable both theoretically and empirically.",
+      "8. Elastic net introduces two more hyperparameters \u03bb1 and \u03bb2 which make the method harder to tune.",
+      "9. The related work section should be improved.",
+      "10. The paper misses many recent papers on communication-efficient FL.",
+      "11. The presentation is not satisfactory.",
+      "12. In Algorithm 1, why is the local update presented in this way? How do you solve that optimization problem locally? In practice we may use SGD as in Algorithm 2? Why are they inconsistent? Are we using stochastic optimization?",
+      "13. In the theory part, there is no formal statement of the assumptions.",
+      "14. I do not know the setting of this analysis.",
+      "15. Particularly, which part is related to the client drift?",
+      "16. The assumptions should be stated very clearly."
+    ],
+    [
+      "1. **Table 1 - what do these symbols mean ? Please update the caption for readability.**",
+      "2. **Theorem 3.1 The second term depends on d -  will it be negligible when we are dealing with practical large models ? A supporting plot simulating the convergence rates would be helpful.**",
+      "3. **One claim of the paper is that it can effectively deal with both client drift and communication compression. However, non-IID exp is extremely limited, only Shakesepeare and one non-iid setting; To support the drift robust claims - there needs to be more experiments on multiple dataset , models, and across different strength of heterogeneity comparing with multiple method that only deal with client drift / data heterogeneity.**",
+      "4. **In the non-iid setting, SCAFFOLD which is a standard approach to deal with client drift seems to perform equally well or even better than the proposed solution; Can you add more discussion on this and what are the scenarios when SCAFFOLD is better and when the proposed algorithm is better.**",
+      "5. **The theory is based off FedDyn. Now, FedDyn and SCAFFOLD already deal with the client drift / heterogeneity and thus it is hard to flesh out the roles of the regularization penalty introduces in this paper.**",
+      "6. **Analysis on FedAvg + \u21131 + \u21132 i.e. Algorithm 1 needs to be done - to clearly show if there is any advantage from these penalty terms.**",
+      "7. **For fair comparison, you need to compare with different drift robust algo + compression + EF with the proposed solution.**",
+      "8. **Empirically, for different compression rate ( using Top-k, Sign, Quantization etc compressor + Error Feedback compression operation C ) a clean experiment is to compare : FedAvg + C + EF vs FedAvg + \u21131 + \u21132**",
+      "9. **Also in theory, it is beneficial to discuss the convergence rate obtained (additional terms) with that in case of EF + Compression (Quantize, top k , q sparse etc several available approaches )**"
+    ],
+    [
+      "1. \"FedProx and FedDyn are also FL schemes that utilize regularization (\u21132-like), thus this paper adds the \u21131 term with a sign adjustment.\"",
+      "2. \"The last sentence in page 6: 'We optimize the hyperparameters depending on the evaluated dataset: learning rates, \u03bb2, \u03bb1' is dubious as it relates to novelty since it can come down to the task of tuning these parameters to achieve the desired result, which is acceptable for application.\"",
+      "3. \"Table 2 shows that the number of non-zero elements are reduced across the board, but it does not show 'when' the non-zero elements become zero. This can be shown by a plot of non-zero elements vs communication round.\""
+    ],
+    [
+      "1. Theory makes very strong assumptions.",
+      "2. Theory does not prove improvement over baseline method, nor does it help much with practical questions (selecting tuning parameters etc).",
+      "3. Experiments show only marginal improvements over the baseline in terms of both compression and quality."
+    ]
+  ],
+  "review_num": 4,
+  "item_num": [
+    16,
+    9,
+    3,
+    3
+  ]
+}

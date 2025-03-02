@@ -1,0 +1,50 @@
+{
+  "output": [
+    [
+      "1. How are the special mask embeddings designed? Are they trainable?",
+      "2. The authors refer to \u201cgolden token\u201d several times before providing its definition in the REVDET paragraph in Sec.2.1. It would be better if the authors can reorganize for this problem.",
+      "3. It seems that the generated corrupted images from the pretrained dVAE decoder are somehow the smoothed version of the original images. Therefore I wonder if it is possible to directly produce corrupted image by artificial smoothing on some random regions without training any new modules?"
+    ],
+    [
+      "1. The enhancer network's reconstruction ability does not seem very good.",
+      "2. It is not very clear why making minor changes (mostly smoothing from the figures) can lead to better pretraining.",
+      "3. The paper tries to make some arguments, but they are a bit convolved and do not convey a good intuition.",
+      "4. The improvements on small and base size models are incremental, especially compared to BEiT.",
+      "5. It does not seem to be statistically significant or rewarding enough to justify the complexity of training the model.",
+      "6. The results on larger CNN and ViT are not impressive."
+    ],
+    [
+      "1. \"In Table 1 and Table 2 the reported results are the median of 3 independent runs. Are the competitors using the same convention? Why the median instead of the mean and std? Do all three independent runs yield comparable performance? It is unclear if that is the same in all the other tables, or if the other tables report the performance of a single run.\"",
+      "2. \"Table 6 proves that sliding window normalization is beneficial to the performance of the proposed method. I did not understand if the same normalization procedure is applicable also to the competitors. I think the paper would benefit from either: (1) specifying why the sliding normalization is not applicable to the competitors or (2) a comparison with the best-performing competitor to exclude most of the performance gains are caused by the normalization procedure.\""
+    ],
+    [
+      "1. \"But there is no visualization of RevDet. How well does the model solve this pretext task? Some visualization or discussion will improve the quality of the paper.\"",
+      "2. \"The pertaining objectives of ResPix and RevDet seem independent to me. What if combining them together? Is there any difficulty to do that or do you think this may raise any problems? I'm curious that whether using the generative and discriminative objectives together will lead to better representations.\""
+    ],
+    [
+      "1. At a higher level, it seems to me that CIM is very similar to MIM. Both require the model to learn to reconstruct the masked/corrupted tokens from the surrounding context.",
+      "2. The gain over BEiT is small in Table 1 and 3. Since CIM depends on a small BEiT generator, I wonder what the real advantage of the proposed approach over BEiT is, especially when the ViT backbone is used.",
+      "3. For ResNet, I wonder if there can still be a (BEiT-like) Masked Image Modeling baseline to help us understand the benefits of CIM for CNN. All entries in Table 2 are contrastive based.",
+      "4. The proposed approach requires a generator (small BEiT) to produce the corrupted image, which makes the system more complicated and reliant on another SSL model.",
+      "5. The generative and discriminative objective (RESPIX, REVDET) are both similarly effective. Is there any further boost when you combine both? It\u2019d be great to have one best choice at the end.",
+      "6. In Table 9, it seems the benefits of scaling are not very significant e.g. 1 point from ViT-Base to ViT-Large. It may be useful to investigate this further whether it\u2019s caused by suboptimal fine-tuning recipe, generator/tokenizer choice, etc.",
+      "7. [Option] flalI am curious if CIM-REVDET would do better than CIM-RESPIX and BEiT on ImageNet linear eval or KNN eval since it uses a discriminative objective."
+    ],
+    [
+      "1. The proposed method has a weakness in that a pre-trained model is necessarily required in any form (e.g., Dall-E models) as a part of the generator.",
+      "2. In the case of the ViT model, I am not sure if the proposed method is a better way than the existing BeiT or MAE-style MIM approaches. Also, related explanations and comparisons are lacking. For example, the comparison with MAE (83.1% in Table 1) will be fair when the MAE generator is used instead of external Dall-E models (82.6% in Table 10). In this case, MAE shows better performance than the proposed method.",
+      "3. The explanation of the need for a generator is somewhat lacking. Is it not possible to replace this by applying strong augmentations (e.g., cutout, ColorJitter, etc.) only to random patches?",
+      "4. I think the main novelty comes from that made MIM pre-training in CNN. Is there any unique advantage of MIM pre-training in CNN?",
+      "5. Missing comparison; BeiT and MAE have also known for their superior performances on ADE20K semantic segmentation. However, the authors only report the ADE20K performances for CNNs. Could the proposed method achieve better performances on the ADE20K than BeiT or MAE?"
+    ]
+  ],
+  "review_num": 6,
+  "item_num": [
+    3,
+    6,
+    2,
+    2,
+    7,
+    5
+  ]
+}

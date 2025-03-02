@@ -1,0 +1,38 @@
+{
+"output": [
+    [
+      "1. The two-stage optimization process, which uses two different optimization algorithms, seems to be the remaining problem to solve.",
+      "2. It would be better if the analysis can be applied to settings without this technical workaround."
+    ],
+    [
+      "1. This paper requires the student network has the same width as the teacher network. ",
+      "2. It is unknown whether such a result can be generalized to the case where we don't know m in advance.",
+      "3. To connect the noisy SGD and vanilla SGD, the algorithm requires reparameterizing the neural network. This kind of trick seems to be impractical in real applications, especially for DNNs."
+    ],
+    [
+      "1. The presentation of the paper, especially Section 4.2 should be improved.",
+      "2. The two-phase algorithms are not presented in a unified way, which leads to some ambiguities for me.",
+      "3. The results are not a substantial improvement over [1].",
+      "4. The only new result for this paper is showing that when the teacher and the student have the same width, we can have a computationally efficient algorithm to perform the estimation, using the idea from [2]."
+    ],
+    [
+      "1. The authors claimed that their results do not require high over-parameterization conditions. However, according to Theorem 4.5, the convergence rate is O(m5/n), as well as the minimum singular value \u03c3min heavily depending on m. That means, their results are only valid to m\u226an rather than over-parameterization.",
+      "2. I don\u2019t agree with the authors\u2019 current claimed O(1/n) rate for neural networks, because this is a width-dependent result though the authors set m<d in this work. Instead, kernel methods obtain a width-independent O(n\u22121/2) convergence rate, e.g., (Bach, JMLR 2017, Gal et al. NeurIPS 2022). Hence, in this case, it is not enough to show the separation between kernel methods and neural networks.",
+      "3. If we put the above key issue aside, a small m (as well as the experiments) makes sense for the teacher network with few activations. But for the student network, a few m significantly restrict the model expressivity. I'm wondering the size of function space (in my next question). Besides, this also effects the convergence of phase II in Proposition 4.4 with O(1/m3). The convergence results require to work in a large m setting, falling into a self-contradiction suitation.",
+      "4. The considered function space in Eq. (1) is a norm-based function space, and can be regarded as a subspace of variational space for two-layer neural networks via signed measure (or similar to the path-norm based space), see (Bach, JMLR2017). The separation between kernel methods and two-layer neural networks has been studied in this larger space [2] as kernel methods suffer from the curse of dimensionality \u03a9(n\u22121/d).",
+      "5. While this work focuses on a smaller function space and kernel methods are close to the O(n\u22121/2) rate in high dimensional settings. I understand the authors aim to show the separation between kernel methods and neural networks on the convergence rate: O(n\u22121/2) vs. O(1/n). However, strictly speaking, this is not the claimed \u201ccurse of dimensionality\u201d in the approximation theory view.",
+      "6. Proposition 4.3 appears vacuous due to the exponential order of m and \u03b2. Regarding \u03b2, the authors suggest using \u201ca sufficiently large \u03b2\u201d in phase I to ensure a near-optimal result. However, it makes the first term exponentially large in the first term of Proposition 4.4, resulting in a vacuous result."
+    ],
+    [
+      "1. A plot with the learning curves of the student network, along with those of some kernel methods (RF. NTK, or usual kernels such as RBF), with the relevant upper/lower rates of decay, would be extremely helpful in visualizing (and bolstering) the theoretical results."
+    ]
+  ],
+  "review_num": 5,
+  "item_num": [
+    2,
+    3,
+    4,
+    6,
+    1
+  ]
+}

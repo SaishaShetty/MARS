@@ -1,0 +1,39 @@
+{
+  
+  "output": [
+    [
+      "1. It was not clear to me what are the guarantees for the expected regret of the sum of all players and what is the statement for the pseudo-regret of the sum of all players. Can you please clarify",
+      "2. Obtaining convergence to a weak CCE via a pseudo-regret has been typically described in the literature? Is there any novelty in this point? I assume no, the ingenuity starts with the variance reduction methods, correct?",
+      "3. The authors proposed LVE instead of classical IWE with exploration term. Can the authors explain the details of their estimator. It would help if they provide some extended answer. how they derive this estimator. Is it something standard in the literature?",
+      "4. There is another point which was not clear, the regret statements are correct if all the players employ the same algorithm? Do we have the adversarial 1/\\sqrt{T} case, if one of the players plays adversarially/stochastically?"
+    ],
+    [
+      "1. \"In the caption of Table 1, there are two phrases that begin with 'For stochastic algorithms'. The first one should be removed. Moreover, in the second one the first expected should be removed (i.e. the time complexity is the expected running time of achieving an expected approximation error).\"",
+      "2. \"The authors mention that weak \u03f5-CCE is related to social welfare without further explanation. Some clarification may be needed here. As far as I am aware, this does not apply to all the general-sum games but only to those that satisfy a certain 'smoothness' condition.\"",
+      "3. \"While the algorithm stated in the pseudo-code is correct, equation (1) seems to be wrong. In particular, the term \u03c3ik\u2212\u03c4(\u2026) mixes quantities that live in the primal (players' strategies) and live in the dual (gradients).\"",
+      "4. \"At the beginning of Section 4: 'where a\u2212i\u2208A\u2212i denotes a random variable ...' (add s)\"",
+      "5. \"LVE used in Algorithm 1 is not yet defined at this point.\"",
+      "6. \"It seems that wi0 and \u03c3i0 used in the definition of Ui are never defined (I suppose they are uniform distribution over the simplex).\"",
+      "7. \"On the third line of page 6, the phrase 'sampled from q\u2212i' seems to be redundant.\""
+    ],
+    [
+      "1. They mainly analyze the expected regret with a stochastic algorithm, whilst (Daskalakis, Fishelson and Golowich 21) analyze the actual regret, albeit they have a deterministic algorithm.",
+      "2. In my view, the time to converge may not be directly comparable as it is currently done in Table 1.",
+      "3. In addition, in the algorithm, all the players seem to have a shared random bit. Do the authors think it is possible to overcome this?",
+      "4. One minor comment: In Line 6 of the Algorithm 1, it says compute \u03c3^ik such that... But nowhere, is the actual \u03c3^ik used and all the proofs mainly require the gradient, which is the term on the right hand side. I think it might be better to say that we compute the gradient of h, than the actual estimate \u03c3^ik."
+    ],
+    [
+      "1. \"When presenting the table for comparison in time complexities, it may be helpful to highlight in which regime the first time in your complexity bound will directly dominate?\"",
+      "2. \"And for what threshold of cost will your method offer improvement over prior ones?\"",
+      "3. \"It may also be helpful to remark that your method actually recovers two-player zero-sum case in prior work.\"",
+      "4. \"In section 5, it may be helpful (if you know about it) to remark a bit on the optimality of your constructed estimator, in terms of variance and computational complexity.\""
+    ]
+  ],
+  "review_num": 4,
+  "item_num": [
+    4,
+    7,
+    4,
+    4
+  ]
+}

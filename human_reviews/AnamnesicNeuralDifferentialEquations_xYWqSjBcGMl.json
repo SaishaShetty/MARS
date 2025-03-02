@@ -1,0 +1,31 @@
+{
+  "output": [
+    [
+      "1. [No explicit weaknesses mentioned in the provided review comment.]"
+    ],
+    [
+      "1. \"However, the paper just briefly mentions Backward Euler and Adams-Moultons [Sauer, 2011]. Firstly, it is not self-contained. Many readers from machine learning background don\u2019t know about such numerical methods.\"",
+      "2. \"Therefore, the current explanation does not provide.\"",
+      "3. \"Secondly, although the observation about the stiffness of ODEs is interesting, using such solvers is not a significant contribution.\"",
+      "4. \"Missing comparisons with neural controlled differential equations with log-signature [Morril et al., 2021]. I think this is the main baseline in terms of capturing long-range dynamics.\"",
+      "5. \"The paper mentions this reference but does not give empirical comparisons and a detailed discussion.\"",
+      "6. \"The stiffness of ODE is elucidated clearly. However, there are no illustrations of the spectral information of the matrix A.\""
+    ],
+    [
+      "1. \"This paper is not well described or positioned. It appears to be the exactly same as the HiPPO (High Order Polynomial Projections) method from the literature, with two minor variations.\"",
+      "2. \"Several technical details are missing from the paper.\"",
+      "3. \"It is not clear what A\u03bc means in the paper. It is mentioned that HiPPO derives several families of matrices based on a measure \u03bc; which one is used in this paper? Is it initialized to a specific matrix and then learned, or frozen to a HiPPO matrix?\"",
+      "4. \"Details around the 'Numerical Integration' are very confusing and not clearly presented anywhere in the paper. Section 4.2 claims to use a numerical solver in the style of Neural ODEs, but later claims to use a solver such as Backward Euler. If it is the latter, then Backward Euler is a special case of the integration rules considered in the original HiPPO paper. If it is the former, a more detailed comparison of the tradeoffs of the different integration rules should be discussed and ablated (in particular, a black-box ODE solver trained with the adjoint method should be much slower than the linear recurrences used in HiPPO).\"",
+      "5. \"How are reconstructions for NODE being done in Figure 1? The PolyODE appears to be just the HiPPO reconstruction framework, but such closed form reconstruction formulas don't exist for general NODEs. Also, what is \\alpha in equation (9)?\"",
+      "6. \"Even if the method was described more clearly, this application of HiPPO to higher-dimensional data raises more points that should be discussed. The paper acknowledges that a major limitation of this method is the computational expense of using d independent features (requiring a state size blown up to dN), which is why the original HiPPO only used dimension 1.\"",
+      "7. \"Computational tradeoffs of this method and baselines should be discussed and quantitatively compared, particularly as a function of d and N. Additionally, the numerical integration method should be more clear and its computational speed ablated, as it seems to be an interchangeable component compared to HiPPO's discretization method.\"",
+      "8. \"This issue of blowing up the dimension by a factor of N is in fact one of the main problems addressed by later extensions of HiPPO to full state-space models such as S4. These baselines should be included where appropriate, as they can be used as drop-in models for most of the considered applications (note that they can also be applied to many 'irregularly-sampled' time series problems where the sampling is provided as a mask).\""
+    ]
+  ],
+  "review_num": 3,
+  "item_num": [
+    1,
+    6,
+    8
+  ]
+}

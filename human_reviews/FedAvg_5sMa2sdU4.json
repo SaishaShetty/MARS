@@ -1,0 +1,43 @@
+{
+  "output": [
+    [
+      "1. The setup of experiments in Section 5 do not align with the theoretical results.",
+      "2. I would like to see the empirical performance of FedAvg with the specified initialization strategy for solving a problem where all the assumptions (network architecture and activation), which could better corroborate the theoretical results.",
+      "3. [minor] The non-iid setting considered in Sec 5 is not very challenging, it might be interesting to study the performance of FedAvg under more extreme data heterogeneity conditions, e.g., settings in Table III in [LDC+2021]."
+    ],
+    [
+      "1. The presentation is not clear. There are lots of unclear definitions, which makes the paper hard to follow. (see detailed comments in next section)",
+      "2. Assumption 3 seems to be a strong assumption on the activation functions. What are specific examples of this kind of activation function?",
+      "3. It is unclear whether FedAvg is better than the naive mini-batch SGD baseline in this setting. For example, if we do not perform local updates and instead compute r stochastic gradients at the same point and send the mini-batch gradients to the server and then update the model, whether FedAvg can outperform this mini-batch SGD baseline? According to Lemma 1, such a procedure can reduce \u03c1, and it will also avoid the error introduced by local updates as in Lemma 2.",
+      "4. The paper only shows the convergence guarantee of FedAvg. Therefore, it is unclear the generalization performance of FedAvg using overparameterized multi-layer neural networks. Note that most of the existing works consider a stochastic problem, and thus their convergence guarantees of FedAvg can serve as the generalization guarantees."
+    ],
+    [
+      "1. Compared with the result for centralized training (Nguyen and Mondelli, 2020), the technical contribution of this paper is questionable.",
+      "2. The network architecture, the initialization, as well as most of the proof, are from Nguyen and Mondelli (2020).",
+      "3. While in Remark 5, the technical novelty compared with it is discussed, either extending to federated training or dealing with stochastic gradient is not significant or novel enough.",
+      "4. The analysis of federated training is likely to be superficial or unrealistic in that, the total update length within each communication round, decreases as the local training steps increases.",
+      "5. In particular, the step size \u03b7\u224dA\u2212r (A>1) where r is the number of local steps so in total, \u03b7r decreases exponentially. For one thing, this is never the real world case.",
+      "6. Usually, each local client will train for several steps with constant step size and then aggregate on the server side.",
+      "7. More locally training steps makes the averaging step harder, while in this paper's configuration, more local steps mean the total change of the parameter becomes even smaller, thus averaging also become easier.",
+      "8. This lead to the theoretical aspect: this kind of configuration makes the total local updates within r steps so small, that the first-order approximation is precise enough.",
+      "9. This makes the r-step update FedAvg no harder than the 1-step update FedSGD.",
+      "10. It is then trivial to show that FedSGD indeed can handle arbitrary heterogeneity in the clients.",
+      "11. The presentation needs further polishing.",
+      "12. I found several typos and notation inconsistencies in the equations."
+    ],
+    [
+      "1. \"I feel that the linear convergence of overparameterized model in the federated learning scenario is trivial. See the following two references. The data heterogeneity is characterized by the gap between global minimum and average of client minimum [Li2019] or the gradient noise at the global minimizer [Khaled2019]. For overparameterized model, both of those value are zero. It generally says that for overparameterized model there is no 'data heterogeneity'. I would be expecting to hear how data heterogeneity is defined in this paper and how it is different from those existing definitions.\"",
+      "2. \"I agree that Theorem 1 indicates that FedAvg-SG attains a linear rate. But according to Remark 8 in the appendix, it appears that the choice of learning rate is very sensitive, it must be of the order \u0398(\u03f52). If it is smaller, for example, \u03b7=\u0398(\u03f53), then the rate cannot be linear; and if \u03b7=\u0398(\u03f5), the convergence is not guaranteed. I don't think this result is satisfactory. For other research on overparameterized models, the following two references [Du2018] and [Ma2018] show the linear convergence rate can be achieved with a step size independent w.r.t. \u03f5. It is not clearly clarified in this paper why there is such uncommon constraints on the learning rate.\"",
+      "3. \"As stated by the author in the rebuttal, this work uses a different definition of the data heterogeneity from [Li2019] and [Khaled2019]. So I don't think this result solves the standard heterogeneity issue in the federated learning.\"",
+      "4. \"Also, compared to prior over-parameterized model studies, this paper has non-standard constraints on the learning rate. I agree that multiple local updates will make -level learning rate invalid but it makes this paper meaningless: I can always run one-step local update at each edge device with a constant learning rate then applying [Du2018] and [Ma2018] to standard SGD with mini-batches; it also has a linear convergence rate.\"",
+      "5. \"Besides both above, I agree with Reviewer Er5f: there exists solid theoretical results showing that the minibatch SGD is always not worse than the federated averaging approach, so the motivation of sololy studying FedAvg is weak.\""
+    ]
+  ],
+  "review_num": 4,
+  "item_num": [
+    3,
+    4,
+    12,
+    5
+  ]
+}
