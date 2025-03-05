@@ -23,24 +23,30 @@ pip install -r requirements.txt
 
 ### Usage
 #### Run
-To test the system, use the following command:
-```bash
-python multiagent.py <cfp_url> <pdf_path>
-```
+Firstly, we run the file that gives questions that could be useful to improve the paper by the questioner.
+To test this system, use the following command:
+
 - `<cfp_url>`: URL to the Conference Call for Papers (CFP).
-- `<pdf_path>`: Path to the PDF file of the research paper.
+- `<json_path>`: Path to the json file of the research paper (Sectioned).
 
 #### Example
 ```bash
-python multiagent.py https://www.example.com/cfp example_paper.pdf
+python final.py https://www.example.com/cfp example_paper.json
 ```
+Once the file is saved as a "feedback_collab.json". 
+Run the final_qa.py to get answers from the questioner that can help the authors improve the paper.
 
+#### Example
+```bash
+python final_qa.py feedback_collab.json
+```
 ### Outputs
+
 1. **Console Output**:
    - Displays the feedback for each section.
 
 2. **Feedback JSON File**:
-   - Saves detailed feedback for each section in a `feedback.json` file.
+   - Saves detailed feedback for each section with the answers from the questioner in `feedback_collab_with_answers.json` file.
 
 #### Sample Feedback Format
 ```json
@@ -79,6 +85,7 @@ python multiagent.py https://www.example.com/cfp example_paper.pdf
 - **`build_models.py`**: Manages AI model creation and interaction.
 - **`requirements.txt`**: Lists all dependencies for the project.
 - **`feedback_files/`**:Contains list of feedback json files.
+- **`human_reviews/`**:Contains list of 10 research paper human reviews.
 - **`util/`**: Contains utility scripts for various tasks.
   - **`extract_cfp.py`**: Extracts topics from CFP.
   - **`extract_keywords.py`**: Extracts keywords from text.
@@ -87,3 +94,7 @@ python multiagent.py https://www.example.com/cfp example_paper.pdf
   - **`scholar.py`**: Searches for academic papers.
   - **`reviewer.py`**: Defines reviewer classes and functions.
   - **`review_collab.py`**: Reviewers communicate with each other and provide feedback and summary.
+  - **`eval_scores.py`**: The evaluation scores (BLEU,ROUGE,METEOR) between LLM generated responses with the human reviews.
+  - **`prob_scores.py`**: A mathematical evaluation of weighted probability scores of the LLM generated accepts and rejects for each section in the paper.
+  - **`ablation.py`**: ....
+  - **`plotter.py`**: Plots the scores from the metric scores.
