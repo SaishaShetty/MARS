@@ -44,6 +44,8 @@ python MARS.py https://www.example.com/cfp example_paper.json
 ```
 Once the processing is complete, it is saved as a "feedback_collab_answer.json". This file contains the feedback for each section of the paper and the answers to the questions asked by the questioner.
 
+The schema for a paper that can be processed by the pipeline can be found in the `paper.schema.json` file.
+
 ### Outputs
 
 1. **Console Output**:

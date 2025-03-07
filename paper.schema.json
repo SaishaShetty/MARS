@@ -1,0 +1,438 @@
+
+
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "ID": {
+        "type": "string"
+      },
+      "Title": {
+        "type": "string"
+      },
+      "Keywords": {
+        "type": "string"
+      },
+      "URL": {
+        "type": "string"
+      },
+      "paper_draft_url": {
+        "type": "string"
+      },
+      "Conferece": {
+        "type": "string"
+      },
+      "track": {
+        "type": "string"
+      },
+      "acceptance": {
+        "type": "string"
+      },
+      "review_scores": {
+        "type": "string"
+      },
+      "input": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "authors": {
+            "type": "array",
+            "items": {}
+          },
+          "emails": {
+            "type": "array",
+            "items": {}
+          },
+          "sections": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "heading": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "heading",
+                  "text"
+                ]
+              }
+            ]
+          },
+          "year": {
+            "type": "integer"
+          },
+          "abstractText": {
+            "type": "string"
+          },
+          "creator": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "title",
+          "authors",
+          "emails",
+          "sections",
+          "year",
+          "abstractText",
+          "creator"
+        ]
+      },
+      "output": {
+        "type": "array",
+        "items": [
+          {
+            "type": "array",
+            "items": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "type": "array",
+            "items": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "type": "array",
+            "items": [
+              {
+                "type": "string"
+              }
+            ]
+          }
+        ]
+      },
+      "review_num": {
+        "type": "integer"
+      },
+      "item_num": {
+        "type": "array",
+        "items": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      }
+    },
+    "required": [
+      "ID",
+      "Title",
+      "Keywords",
+      "URL",
+      "paper_draft_url",
+      "Conferece",
+      "track",
+      "acceptance",
+      "review_scores",
+      "input",
+      "output",
+      "review_num",
+      "item_num"
+    ]
+  }
+  
+  
