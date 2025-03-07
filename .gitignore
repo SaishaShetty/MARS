@@ -9,3 +9,4 @@ __pycache__/
 feedback_*
 *.txt
 *.zip
+**/__pycache__/
