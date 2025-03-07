@@ -1,4 +1,4 @@
-from util.reviewers import reviewer_messages
+from util.reviewer import reviewer_messages
 import re
 import os
 import ollama
@@ -50,24 +50,6 @@ def generate_base_models(url, paper_contents):
             ollama.create(model=model, from_="llama3.2", system=system, parameters={"num_ctx": 4096, "temperature": 0.7})
 
     return gen_novelty_model(paper_contents)
-
-"""def generate_paper_models(paper_contents):
-
-    for i, (key, value) in enumerate(paper_contents.items()):
-        key = key.replace("\n", "")
-        key = key.replace(" ", "")
-        key = key[:10]
-        value = value.replace("\n", "")
-        if not isModelLoaded(key):
-            print(f"Creating model {key}")
-            ollama.create(model=key, from_='llama3.2', system=value, parameters={'num_ctx': 4096, 'temperature': 0.7})
-        else:
-            print(f"Deleting model {key}")
-            ollama.delete(model=key)
-            print(f"Creating model {key}")
-            ollama.create(model=key, from_='llama3.2', system=value, parameters={'num_ctx': 4096, 'temperature': 0.7})
-    
-    return None"""
 
 def generate_paper_models(paper_contents):
     paper_keys = []

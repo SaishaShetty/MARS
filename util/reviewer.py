@@ -67,6 +67,11 @@ def assign_reviewers():
     return assigned_reviewers
 assigned_reviewers = assign_reviewers()
 
+reviewer_messages = []
+for reviewer in assigned_reviewers:
+    message = f"You are {reviewer.name}, who has been assigned to review a paper. You are {reviewer.experience_level} reviewer with {reviewer.knowledge_level} knowledge base and {reviewer.tone} tone of feedback. Your decisions may include: [{', '.join(reviewer.decisions)}]"
+    reviewer_messages.append(message)
+
 if __name__ == "__main__":
     print("\nAssigned Reviewers:")
     for reviewer in assigned_reviewers:
